@@ -47,7 +47,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
   
 
   /*right side of local memory copied into shared memory*/
-  memcpy(r_array, arr + middle + 1, sizeof(int)*(size_value)));
+  memcpy(r_array, arr + middle + 1, sizeof(int)*(size_value));
 
   /*switch case from lecture that allows us to manipulate the child process and parent process*/
   switch(fork()){
