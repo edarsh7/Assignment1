@@ -36,11 +36,10 @@ void singleProcessMergeSort(int arr[], int left, int right)
  */
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
+  //int arr[]= {} is already created
+  int shmid = shmget(IPC_PRIVATE, sizeof(arr), 0666|IPC_CREAT);
+  int *arr =  (int *)shmat (shmid, (void*)0,0);
 
-  //we create a shared memory segment that has an ID called shmid
-  int shmid = shmget(IPC_PRIVATE, 1024, 0666|IPC_CREAT);
-  //we attach the address of the shared memory segment to an int pointer called array2
-  arr =  (int *)shmat (shmid, (void*)0,0);
 
   switch(fork()){
     case -1:
