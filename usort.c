@@ -44,23 +44,20 @@ void multiProcessMergeSort(int arr[], int left, int right)
   
 
   // right side of local memory copied into shared memory
-  memcpy(r_array, arr + middle + 1, sizeof(int)*(right+1));
+  memcpy(r_array, arr + middle + 1, sizeof(int)*(right-middle));
 
   switch(fork()){
     case -1:
       exit;
     case 0:
       r_array = (int *)shmat (shmid, (void*)0,0);
-      int a_size = sizeof(r_array)/sizeof(r_array[0]);
-      printf("a_sizez = %d \n", a_size);
-      singleProcessMergeSort(r_array, 0, a_size - 1);
-
+      singleProcessMergeSort(r_array, 0, (right-middle-1);
       shmdt(r_array);
       exit(0);
     default:
       singleProcessMergeSort(arr, 0, middle);
       wait(NULL);
-      memcpy(arr+middle,r_array, sizeof(r_array));
+      memcpy(arr+middle+1,r_array, sizeof(r_array)*(right-middle));
       shmdt(r_array);
       shmctl(shmid, IPC_RMID,NULL);
       merge(arr, left, middle, right);
