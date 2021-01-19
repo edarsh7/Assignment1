@@ -50,7 +50,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
       break;
     default:
       wait(NULL);
-      shmdt(shm);
+      shmdt(array2);
       shmctl(shmid, IPC_RMID,NULL);
   }
 }
