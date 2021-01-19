@@ -50,7 +50,8 @@ void multiProcessMergeSort(int arr[], int left, int right)
     // this is the child process that has array2, and array
     case 0:
       array = (int *)shmat (shmid, (void*)0,0);
-      printf("child copied array[0]: %d\n", array[0]);
+      int arr_size = sizeof(array) / sizeof(array[0]);
+      printf("Given array is %d\n", arr_size);
       break;
     default:
       wait(NULL);
