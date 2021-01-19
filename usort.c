@@ -29,8 +29,5 @@ void singleProcessMergeSort(int arr[], int left, int right)
  */
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
-  // Delete this line, it's only here to fail the code quality check
-  int i = 0;
-
-  // Your code goes here 
+  
 }
