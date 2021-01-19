@@ -61,7 +61,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
       memcpy(arr+middle+1,r_array, sizeof(r_array)*(right-middle));
       shmdt(r_array);
       if(shmctl(shmid, IPC_RMID, NULL)){
-        print("works");
+        printf("works");
       }
       merge(arr, left, middle, right);
   }
