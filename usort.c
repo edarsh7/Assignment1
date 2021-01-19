@@ -46,6 +46,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
       exit;
     // this is the child process that has array2, and array
     case 0:
+      arr = (int *)shmat (shmid, (void*)0,0); 
       printf("child process: %d has array[0] as: %d\n\n", getpid(), arr[0]);
       break;
     default:
