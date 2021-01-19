@@ -37,22 +37,20 @@ void singleProcessMergeSort(int arr[], int left, int right)
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
   //int arr[]= {} is already created
-  int shmid = shmget(IPC_PRIVATE, sizeof(arr), 0666|IPC_CREAT);
-  printf("%d how\n", arr[0]);
-  int *arr =  (int *)shmat (shmid, (void*)0,0);
-  printf("%d what\n", arr[0]);
+  int shmid = shmget(IPC_PRIVATE, 4*sizeof(arr), 0666|IPC_CREAT);
+  int *array =  (int *)shmat (shmid, (void*)0,0);
+  memcpy(array, arr, 4*sizeof(arr));
+  printf("%d this is array ptr", array[0]);
 
   switch(fork()){
     case -1:
       exit;
     // this is the child process that has array2, and array
     case 0:
-      arr = (int *)shmat (shmid, (void*)0,0); 
-      printf("child process: %d has array[0] as: %d\n\n", getpid(), arr[0]);
       break;
     default:
       wait(NULL);
-      shmdt(arr);
+      shmdt(array);
       shmctl(shmid, IPC_RMID,NULL);
   }
 }
