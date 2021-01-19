@@ -52,6 +52,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
     case 0:
       r_array = (int *)shmat (shmid, (void*)0,0);
       int a_size = sizeof(r_array)/sizeof(r_array[0]);
+      printf("a[0]=%d, a[1]=%d, a[2]=%d \n",r_array[0],r_array[1],r_array[2]);
       singleProcessMergeSort(r_array, 0, a_size - 1);
       printf("a[0]=%d, a[1]=%d, a[2]=%d \n",r_array[0],r_array[1],r_array[2]);
       shmdt(r_array);
