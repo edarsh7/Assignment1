@@ -32,7 +32,8 @@ void singleProcessMergeSort(int arr[], int left, int right)
 }
 
 /* 
- * This function stub needs to be completed
+ * Uses fork() to concurrently run singleProcessMergeSort() on the left (parent) sub array and the right (child)
+ * sub array before copying the shared memory back into the main process and merging the two sub arrays.
  */
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
@@ -53,13 +54,13 @@ void multiProcessMergeSort(int arr[], int left, int right)
       r_array = (int *)shmat (shmid, (void*)0,0);
       singleProcessMergeSort(r_array, 0, (right-middle-1));
       shmdt(r_array);
-      exit(0);
+      break;
     default:
       singleProcessMergeSort(arr, 0, middle);
       wait(NULL);
       memcpy(arr+middle+1,r_array, sizeof(r_array)*(right-middle));
       shmdt(r_array);
-      shmctl(shmid, IPC_RMID,NULL);
+      shmctl(shmid, IPC_RMID, NULL);
       merge(arr, left, middle, right);
   }
 }
