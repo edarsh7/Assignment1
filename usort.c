@@ -38,7 +38,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
 {
   int middle = (left+right)/2;
 
-  for(int loop = 0; loop < 10; loop++)
+  for(int loop = 0; loop < 6; loop++)
       printf("%d ", arr[loop]);
 
   //int arr[]= {} is already created
