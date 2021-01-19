@@ -46,6 +46,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
     case -1:
       exit;
     case 0:
+      strcat(shm, "fuuuuu");
       printf("child process: %d has shm as: %s\n\n", getpid(), shm);
       break;
     default:
