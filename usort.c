@@ -40,13 +40,13 @@ void multiProcessMergeSort(int arr[], int left, int right)
   char *shm =  (char *)shmat (shmid, (void*)0,0);
 
   strcat(shm, "hi");
-  printf("parent process: %d", getpid());
+  printf("parent process: %d\n", getpid());
 
   switch(fork()){
     case -1:
       exit;
     case 0:
-      printf("child process: %d has shm as: %s", getpid(), shm);
+      printf("child process: %d has shm as: %s\n\n", getpid(), shm);
       break;
     default:
       wait(NULL);
