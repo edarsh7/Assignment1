@@ -38,9 +38,10 @@ void singleProcessMergeSort(int arr[], int left, int right)
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
   int middle = (left+right)/2;
+  int size_value = right-middle;
   
-  //int arr[]= {} is already created
-  int shmid = shmget(IPC_PRIVATE, sizeof(int) * (right+1), 0666|IPC_CREAT);
+  //size of shared memory segment = size of integer * number of elements in arraay
+  int shmid = shmget(IPC_PRIVATE, sizeof(int) * size_value, 0666|IPC_CREAT);
   int *r_array =  (int *)shmat (shmid, (void*)0,0);
   
 
