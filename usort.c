@@ -12,6 +12,13 @@
  ************************************************************************/
 
 #include "merge.h"
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 /* LEFT index and RIGHT index of the sub-array of ARR[] to be sorted */
 void singleProcessMergeSort(int arr[], int left, int right) 
