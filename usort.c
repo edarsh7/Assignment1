@@ -59,7 +59,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
     default:
       singleProcessMergeSort(arr, 0, middle);
       wait(NULL);
-      memcpy(arr+middle+1,r_array, sizeof(r_array)*(right-middle));
+      memcpy(arr+middle+1, r_array, sizeof(int)*(right-middle));
       shmdt(r_array);
       shmctl(shmid, IPC_RMID, NULL);
       merge(arr, left, middle, right);
