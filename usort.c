@@ -45,7 +45,8 @@ void multiProcessMergeSort(int arr[], int left, int right)
 
   // right side of local memory copied into shared memory
   memcpy(r_array, arr + middle + 1, (sizeof(arr)/2)*sizeof(int));
-  printf("size: %d\n",sizeof(arr));
+  int arr_size = sizeof(arr) / sizeof(arr[0]);
+  printf("size: %d\n",arr_size);
 
   switch(fork()){
     case -1:
