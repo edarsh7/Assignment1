@@ -54,7 +54,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
       r_array = (int *)shmat (shmid, (void*)0,0);
       singleProcessMergeSort(r_array, 0, (right-middle-1));
       shmdt(r_array);
-      break;
+      exit(0);
     default:
       singleProcessMergeSort(arr, 0, middle);
       wait(NULL);
