@@ -37,9 +37,7 @@ void singleProcessMergeSort(int arr[], int left, int right)
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
   int middle = (left+right)/2;
-
- 
-
+  printf("size: %d \n", right);
   //int arr[]= {} is already created
   int shmid = shmget(IPC_PRIVATE, 4*sizeof(arr), 0666|IPC_CREAT);
   int *r_array =  (int *)shmat (shmid, (void*)0,0);
