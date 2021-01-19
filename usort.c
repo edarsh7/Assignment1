@@ -42,7 +42,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
   int *array =  (int *)shmat (shmid, (void*)0,0);
 
   // we have attached arr to array ptr with memcpy
-  memcpy(array, arr + middle, 5*sizeof(arr));
+  memcpy(array, arr + middle + 1, 5*sizeof(arr));
 
   switch(fork()){
     case -1:
