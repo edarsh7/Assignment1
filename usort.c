@@ -49,7 +49,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
 
   switch(fork()){
     case -1:
-      exit;
+      exit(-1);
     case 0:
       //r_array = (int *)shmat(shmid, (void*)0,0);
       singleProcessMergeSort(r_array, 0, (right-middle-1));
