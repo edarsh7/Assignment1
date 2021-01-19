@@ -1,4 +1,4 @@
 usort.c: In function ‘multiProcessMergeSort’:
-usort.c:33:7: warning: unused variable ‘i’ [-Wunused-variable]
-   int i = 0;
+usort.c:52:7: warning: statement with no effect [-Wunused-value]
+       exit;
        ^

@@ -1,0 +1,7 @@
+
+
+Invalid number of test executions!
+
+          Functional:   0/10    0.0%
+
+./check.sh: line 62: 14582 Segmentation fault      (core dumped) ./$sort -m $cnt
