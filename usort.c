@@ -40,7 +40,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
   int middle = (left+right)/2;
   
   //int arr[]= {} is already created
-  int shmid = shmget(IPC_PRIVATE, sizeof(int) * (right+1), 0666|IPC_CREAT);
+  int shmid = shmget(IPC_PRIVATE, sizeof(int) * (right+1), IPC_CREAT|IPC_EXCL);
   int *r_array =  (int *)shmat (shmid, (void*)0,0);
   
 
@@ -51,7 +51,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
     case -1:
       exit(-1);
     case 0:
-      //r_array = (int *)shmat(shmid, (void*)0,0);
+      r_array = (int *)shmat(shmid, (void*)0,0);
       singleProcessMergeSort(r_array, 0, (right-middle-1));
       shmdt(r_array);
       exit(0);
