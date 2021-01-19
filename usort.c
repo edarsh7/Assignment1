@@ -37,25 +37,30 @@ void singleProcessMergeSort(int arr[], int left, int right)
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
   int middle = (left+right)/2;
+
   //int arr[]= {} is already created
   int shmid = shmget(IPC_PRIVATE, 4*sizeof(arr), 0666|IPC_CREAT);
-  int *array =  (int *)shmat (shmid, (void*)0,0);
+  int *r_array =  (int *)shmat (shmid, (void*)0,0);
+  
 
-  // we have attached arr to array ptr with memcpy
-  memcpy(array, arr + middle + 1, 5*sizeof(arr));
+  // right side of local memory copied into shared memory
+  memcpy(r_array, arr + middle + 1, sizeof(arr));
 
   switch(fork()){
     case -1:
       exit;
-    // this is the child process that has array2, and array
     case 0:
-      array = (int *)shmat (shmid, (void*)0,0);
-      int arr_size = sizeof(array) / sizeof(array[0]);
-      printf("Given array is %d\n", arr_size);
-      break;
+      r_array = (int *)shmat (shmid, (void*)0,0);
+      int a_size = sizeof(r_array)/sizeof(r_array[0]);
+      multiProcessMergeSort(r_array, 0, a_size - 1);
+      shmdt(r_array);
+      exit(0);
     default:
+      singleProcessMergeSort(arr, 0, middle);
       wait(NULL);
-      shmdt(array);
+      memcpy(arr+middle,r_array, sizeof(r_array));
+      shmdt(r_array);
       shmctl(shmid, IPC_RMID,NULL);
+      merge(arr, left, middle, right);
   }
 }
