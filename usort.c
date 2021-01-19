@@ -37,29 +37,44 @@ void singleProcessMergeSort(int arr[], int left, int right)
  */
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
+  /*these two lines calculate the middle element, and the amount of elements on the RIGHT SIDE*/
   int middle = (left+right)/2;
   int size_value = right-middle;
   
-  //size of shared memory segment = size of integer * number of elements in arraay
-  int shmid = shmget(IPC_PRIVATE, sizeof(int) * size_value, 0666|IPC_CREAT);
+  /*size of shared memory segment = size of integer * number of elements in arraay*/
+  int shmid = shmget(IPC_PRIVATE, sizeof(int) * (size_value), 0666|IPC_CREAT);
   int *r_array =  (int *)shmat (shmid, (void*)0,0);
   
 
-  // right side of local memory copied into shared memory
-  memcpy(r_array, arr + middle + 1, sizeof(int)*(right-middle));
+  /*right side of local memory copied into shared memory*/
+  memcpy(r_array, arr + middle + 1, sizeof(int)*(size_value)));
 
+  /*switch case from lecture that allows us to manipulate the child process and parent process*/
   switch(fork()){
     case -1:
       exit(-1);
     case 0:
+      
+      /*attach shared memory*/
       r_array = (int *)shmat(shmid, (void*)0,0);
-      singleProcessMergeSort(r_array, 0, (right-middle-1));
+
+      /*calling ms on right side i.e. the child process*/
+      singleProcessMergeSort(r_array, 0, (size_value-1));
+      
+      /*detach shared memory from child process and exit*/
       shmdt(r_array);
       exit(0);
     default:
+      /* send parent process array i.e. left side to mergesort*/
       singleProcessMergeSort(arr, 0, middle);
+
+      /*waiting for child to finish process before continuing*/
       wait(NULL);
-      memcpy(arr+middle+1, r_array, sizeof(int)*(right-middle));
+      
+      /*copying the shared memory segment over to the right side of the local memory*/
+      memcpy(arr+middle+1, r_array, sizeof(int)*(size_value));
+
+      /*detaching, delete and merge the local memory array*/
       shmdt(r_array);
       shmctl(shmid, IPC_RMID, NULL);
       merge(arr, left, middle, right);
