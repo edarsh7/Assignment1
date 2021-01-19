@@ -29,5 +29,21 @@ void singleProcessMergeSort(int arr[], int left, int right)
  */
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
-  
+  int shmid = shmget(IPC_PRIVATE, 1024, 0666|IPC_CREAT);
+  char *shm =  (char *)shmat (shmid, (void*),0);
+
+  strcat(shm, "hi");
+  printf("parent process: %d", getpid());
+
+  switch(fork()){
+    case -1:
+      exit;
+    case 0:
+      printf("child process: %d has shm as: %s", getpid(), shm);
+      break;
+    default:
+      wait(NULL);
+      shmdt(shm);
+      shmctl(shmid, IPC_RMID,NULL);
+  }
 }
