@@ -1,0 +1,5 @@
+./check.sh: line 62: 14582 Segmentation fault      (core dumped) ./$sort -m $cnt
+
+real	0m0.433s
+user	0m0.008s
+sys	0m0.028s
