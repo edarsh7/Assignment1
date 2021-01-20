@@ -83,3 +83,10 @@ void multiProcessMergeSort(int arr[], int left, int right)
       merge(arr, left, middle, right);
   }
 }
+
+
+/*credits:
+* https://www.geeksforgeeks.org/posix-shared-memory-api/  used to learn posix shared memory api
+* Professor Harrisons lecture notes 4 pg 12 on unix shared memory and fork()
+* https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/ShMem.html more material on posix shared memory
+*/

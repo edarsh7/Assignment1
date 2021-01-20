@@ -19,9 +19,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <sys/mman.h>
-#include <sys/stat.h>        /* For mode constants */
-#include <fcntl.h> 
+
 
 /* LEFT index and RIGHT index of the sub-array of ARR[] to be sorted */
 void singleProcessMergeSort(int arr[], int left, int right) 
@@ -83,3 +81,12 @@ void multiProcessMergeSort(int arr[], int left, int right)
       merge(arr, left, middle, right);
   }
 }
+
+
+/*credits:
+* https://man7.org/linux/man-pages/dir_section_2.html used to find documentaion on unix system calls
+* https://www.tutorialspoint.com/c_standard_library/c_function_memcpy.htm used to get memcpy to work
+* https://stackoverflow.com/questions/14757256/using-memcpy-to-copy-part-of-an-array-and-other-memory-manipulation-tools
+* above link was used to determine how to copy half of an array using memcpy()
+* Professor Harrisons lecture notes 4 pg 12 on unix shared memory and fork()
+*/
