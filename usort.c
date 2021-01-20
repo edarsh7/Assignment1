@@ -19,6 +19,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/mman.h>
+#include <sys/stat.h>        /* For mode constants */
+#include <fcntl.h> 
 
 /* LEFT index and RIGHT index of the sub-array of ARR[] to be sorted */
 void singleProcessMergeSort(int arr[], int left, int right) 
