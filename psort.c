@@ -12,6 +12,16 @@
  ************************************************************************/
 
 #include "merge.h"
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <fcntl.h> 
+#include <sys/shm.h> 
+#include <sys/stat.h>
+#include <sys/ipc.h>
+#include <sys/wait.h>
+#include <string.h>
+#include <unistd.h>
+
 
 /* LEFT index and RIGHT index of the sub-array of ARR[] to be sorted */
 void singleProcessMergeSort(int arr[], int left, int right) 
@@ -29,8 +39,46 @@ void singleProcessMergeSort(int arr[], int left, int right)
  */
 void multiProcessMergeSort(int arr[], int left, int right) 
 {
-  // Delete this line, it's only here to fail the code quality check
-  int i = 0;
+  /*these two lines calculate the middle element, and the amount of elements on the RIGHT SIDE*/
+  int middle = (left+right)/2;
+  int shm_size = right-middle;
 
-  // Your code goes here 
+  const char* name = "shm_obj";
+  
+  int shmid = shm_open(name, O_CREAT|O_RDWR, 0666);
+  ftruncate(shmid, sizeof(int) * (shm_size));
+  
+  int* r_array = mmap(0, shm_size, PROT_WRITE, MAP_SHARED, shmid, 0);
+  memcpy(r_array, arr + middle + 1, sizeof(int)*(shm_size));
+
+  /*switch case from lecture that allows us to manipulate the child process and parent process*/
+  switch(fork()){
+    case -1:
+      exit(-1);
+    case 0:
+      
+      /*attach shared memory*/
+      r_array = mmap(0, shm_size, PROT_WRITE, MAP_SHARED, shmid, 0);
+
+      /*calling ms on right side i.e. the child process*/
+      singleProcessMergeSort(r_array, 0, (shm_size-1));
+      
+      /*detach shared memory from child process and exit*/
+      shm_unlink(name);
+      exit(0);
+    default:
+      /* send parent process array i.e. left side to mergesort*/
+      singleProcessMergeSort(arr, 0, middle);
+
+      /*waiting for child to finish process before continuing*/
+      wait(NULL);
+      
+      /*copying the shared memory segment over to the right side of the local memory*/
+      memcpy(arr+middle+1, r_array, sizeof(int)*(shm_size));
+
+      /*detaching, delete and merge the local memory array*/
+      shm_unlink(name);
+      close(shmid);
+      merge(arr, left, middle, right);
+  }
 }

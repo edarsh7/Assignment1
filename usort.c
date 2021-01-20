@@ -39,15 +39,15 @@ void multiProcessMergeSort(int arr[], int left, int right)
 {
   /*these two lines calculate the middle element, and the amount of elements on the RIGHT SIDE*/
   int middle = (left+right)/2;
-  int size_value = right-middle;
+  int shm_size = right-middle;
   
   /*size of shared memory segment = size of integer * number of elements in arraay*/
-  int shmid = shmget(IPC_PRIVATE, sizeof(int) * (size_value), 0666|IPC_CREAT);
+  int shmid = shmget(IPC_PRIVATE, sizeof(int) * (shm_size), 0666|IPC_CREAT);
   int *r_array =  (int *)shmat (shmid, (void*)0,0);
   
 
   /*right side of local memory copied into shared memory*/
-  memcpy(r_array, arr + middle + 1, sizeof(int)*(size_value));
+  memcpy(r_array, arr + middle + 1, sizeof(int)*(shm_size));
 
   /*switch case from lecture that allows us to manipulate the child process and parent process*/
   switch(fork()){
@@ -59,7 +59,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
       r_array = (int *)shmat(shmid, (void*)0,0);
 
       /*calling ms on right side i.e. the child process*/
-      singleProcessMergeSort(r_array, 0, (size_value-1));
+      singleProcessMergeSort(r_array, 0, (shm_size-1));
       
       /*detach shared memory from child process and exit*/
       shmdt(r_array);
@@ -72,7 +72,7 @@ void multiProcessMergeSort(int arr[], int left, int right)
       wait(NULL);
       
       /*copying the shared memory segment over to the right side of the local memory*/
-      memcpy(arr+middle+1, r_array, sizeof(int)*(size_value));
+      memcpy(arr+middle+1, r_array, sizeof(int)*(shm_size));
 
       /*detaching, delete and merge the local memory array*/
       shmdt(r_array);
